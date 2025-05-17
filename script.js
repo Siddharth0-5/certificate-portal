@@ -63,16 +63,24 @@ const validNames = [
   "ARYAN_SINGH"
 ];
 
-function findCertificate() {
-  let input = document.getElementById("nameInput").value.trim();
+function formatName(input) {
+  return input
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)      // Split on any number of spaces
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize
+    .join("_")         // Join with underscores
+    .toUpperCase();    // Final uppercase (redundant but safe)
+}
 
-  // Normalize: lowercase → uppercase and replace spaces with underscores
-  const formattedName = input.toUpperCase().replace(/ +/g, "_");
+function findCertificate() {
+  const rawInput = document.getElementById("nameInput").value;
+  const formattedName = formatName(rawInput);
 
   if (validNames.includes(formattedName)) {
     const filePath = `certificates/${formattedName}.JPG`;
     document.getElementById("result").innerHTML = `
-      <p class="text-green-600 font-medium mb-2">Certificate found for <strong>${input}</strong>:</p>
+      <p class="text-green-600 font-medium mb-2">Certificate found for <strong>${rawInput}</strong>:</p>
       <a href="${filePath}" download class="text-blue-600 underline">⬇️ Download Certificate</a>
       <div class="mt-4">
         <img src="${filePath}" alt="Certificate" class="mx-auto border rounded-lg shadow-md max-w-full" />
@@ -84,3 +92,4 @@ function findCertificate() {
     `;
   }
 }
+
