@@ -64,16 +64,23 @@ const validNames = [
 ];
 
 function findCertificate() {
-  const name = document.getElementById("nameInput").value.trim().toUpperCase().replace(/ /g, "_");
-  if (validNames.includes(name)) {
-    const filePath = `certificates/${name}.JPG`;
+  let input = document.getElementById("nameInput").value.trim();
+
+  // Normalize: lowercase → uppercase and replace spaces with underscores
+  const formattedName = input.toUpperCase().replace(/ +/g, "_");
+
+  if (validNames.includes(formattedName)) {
+    const filePath = `certificates/${formattedName}.JPG`;
     document.getElementById("result").innerHTML = `
-      <p>Certificate found for ${name.replace(/_/g, " ")}:</p>
-      <a href="${filePath}" download>Download Certificate</a>
-      <br><br>
-      <img src="${filePath}" alt="Certificate" style="max-width: 100%; border: 1px solid #ccc; padding: 10px;" />
+      <p class="text-green-600 font-medium mb-2">Certificate found for <strong>${input}</strong>:</p>
+      <a href="${filePath}" download class="text-blue-600 underline">⬇️ Download Certificate</a>
+      <div class="mt-4">
+        <img src="${filePath}" alt="Certificate" class="mx-auto border rounded-lg shadow-md max-w-full" />
+      </div>
     `;
   } else {
-    document.getElementById("result").innerHTML = `<p style="color:red;">Name not found. Please check spelling and try again.</p>`;
+    document.getElementById("result").innerHTML = `
+      <p class="text-red-600 font-semibold">❌ Name not found. Please check your spelling.</p>
+    `;
   }
 }
